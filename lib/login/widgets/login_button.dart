@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_clean/bloc/login_bloc.dart';
 import 'package:flutter_bloc_clean/utils/enums.dart';
+import 'package:flutter_bloc_clean/utils/flush_bar_helper.dart';
 
 class LoginButton extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final formKey;
 
   const LoginButton({super.key, required this.formKey});
@@ -11,31 +13,23 @@ class LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginStates>(
+      listenWhen: (current, previous) =>
+          current.postApiStatus != previous.postApiStatus,
       listener: (context, state) {
         if (state.postApiStatus == PostAPiStatus.error) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text(state.message.toString())),
-            );
+          FlushBarHelper.flushBarErrorMessage(
+              state.message.toString(), context);
         }
         if (state.postApiStatus == PostAPiStatus.success) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text(state.message.toString())),
-            );
+          FlushBarHelper.flushBarErrorMessage('login succesfull', context);
         }
         if (state.postApiStatus == PostAPiStatus.loading) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(content: Text('submitting')),
-            );
+          FlushBarHelper.flushBarErrorMessage('submitting', context);
         }
       },
       child: BlocBuilder<LoginBloc, LoginStates>(
-        buildWhen: (previous, current) => false,
+        buildWhen: (current, previous) =>
+            current.postApiStatus != previous.postApiStatus,
         builder: (context, state) {
           return ElevatedButton(
               onPressed: () {
@@ -43,7 +37,9 @@ class LoginButton extends StatelessWidget {
                   context.read<LoginBloc>().add(LoginApi());
                 }
               },
-              child: const Text('login'));
+              child: state.postApiStatus == PostAPiStatus.loading
+                  ? const CircularProgressIndicator()
+                  : const Text('login'));
         },
       ),
     );
