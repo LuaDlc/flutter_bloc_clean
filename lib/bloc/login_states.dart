@@ -22,7 +22,7 @@ class LoginStates extends Equatable {
       email: email ?? this.email,
       password: password ?? this.password,
       postApiStatus: postApiStatus ?? this.postApiStatus,
-      message: error ?? this.message,
+      message: error ?? message,
     );
   }
 

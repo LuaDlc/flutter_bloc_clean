@@ -21,12 +21,15 @@ class LoginButton extends StatelessWidget {
               state.message.toString(), context);
         }
         if (state.postApiStatus == PostAPiStatus.success) {
-          FlushBarHelper.flushBarErrorMessage('login succesfull', context);
+          FlushBarHelper.flushBarSuccessMessage('login succesfull', context);
         }
         if (state.postApiStatus == PostAPiStatus.loading) {
           FlushBarHelper.flushBarErrorMessage('submitting', context);
         }
       },
+
+      //   "email": "eve.holt@reqres.in",
+      // "password": "cityslicka"
       child: BlocBuilder<LoginBloc, LoginStates>(
         buildWhen: (current, previous) =>
             current.postApiStatus != previous.postApiStatus,
