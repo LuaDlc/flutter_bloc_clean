@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc_clean/data/exceptions/app_exception.dart';
 import 'package:flutter_bloc_clean/data/exceptions/network/base_api_services.dart';
 import 'package:http/http.dart' as http;
@@ -47,6 +48,10 @@ class NetworkServicesApi implements BaseApiServices {
   @override
   Future<dynamic> postApi(String url, var data) async {
     dynamic jsonResponse;
+    if (kDebugMode) {
+      print(url);
+      print(data);
+    }
     try {
       final response = await http
           .post(Uri.parse(url), body: data)
@@ -64,8 +69,10 @@ class NetworkServicesApi implements BaseApiServices {
   }
 
   dynamic returnResponse(http.Response response) {
-    switch (response) {
-      // ignore: constant_pattern_never_matches_value_type
+    if (kDebugMode) {
+      print(response.statusCode);
+    }
+    switch (response.statusCode) {
       case 200:
         dynamic jsonResponse = jsonDecode(response.body);
         return jsonResponse;
@@ -76,7 +83,7 @@ class NetworkServicesApi implements BaseApiServices {
         throw UnauthorisedException();
       case 500:
         throw FetchDataException(
-            'error comunication with server' + response.statusCode.toString());
+            'error comunication with server ${response.statusCode.toString()}');
       default:
         throw UnauthorisedException;
     }
