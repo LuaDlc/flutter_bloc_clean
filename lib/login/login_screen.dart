@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_clean/bloc/login_bloc.dart';
+import 'package:flutter_bloc_clean/main.dart';
 import 'package:flutter_bloc_clean/models/user/user_model.dart';
 import 'widgets/widgets.dart';
 
@@ -22,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _loginBloc = LoginBloc();
+    _loginBloc = LoginBloc(loginRepository: getIt());
   }
 
   @override
