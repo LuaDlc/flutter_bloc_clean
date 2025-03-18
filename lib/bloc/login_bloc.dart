@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc_clean/login/auth/login_repository.dart';
+import 'package:flutter_bloc_clean/services/sesssion_manager/session_controller.dart';
 import 'package:flutter_bloc_clean/utils/enums.dart';
 
 part 'login_event.dart';
@@ -35,18 +36,20 @@ class LoginBloc extends Bloc<LoginEvents, LoginStates> {
 
     emit(state.copyWith(postApiStatus: PostAPiStatus.loading));
 
-    await loginRepository.loginAPi(data).then((value) {
+    await loginRepository.loginAPi(data).then((value) async {
       if (value.error.isNotEmpty) {
-        print('I am here');
         emit(state.copyWith(
-            error: 'login succefull', postApiStatus: PostAPiStatus.success));
+            message: value.error.toString(),
+            postApiStatus: PostAPiStatus.error));
       } else {
+        await SessionController().saveUserInPreference(value);
+        await SessionController().getUserFromPreference();
         emit(state.copyWith(
-            error: value.error.toString(), postApiStatus: PostAPiStatus.error));
+            message: 'login succefull', postApiStatus: PostAPiStatus.success));
       }
     }).onError((error, stackTrace) {
       emit(state.copyWith(
-          error: error.toString(), postApiStatus: PostAPiStatus.error));
+          message: error.toString(), postApiStatus: PostAPiStatus.error));
     });
   }
 }

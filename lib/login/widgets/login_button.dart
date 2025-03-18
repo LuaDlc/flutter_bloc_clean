@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_clean/bloc/login_bloc.dart';
+import 'package:flutter_bloc_clean/config/routes/routes_name.dart';
 import 'package:flutter_bloc_clean/utils/enums.dart';
 import 'package:flutter_bloc_clean/utils/flush_bar_helper.dart';
 
@@ -21,14 +22,15 @@ class LoginButton extends StatelessWidget {
               state.message.toString(), context);
         }
         if (state.postApiStatus == PostAPiStatus.success) {
+          Navigator.pushNamed(context, RoutesName.homeScreen);
           FlushBarHelper.flushBarSuccessMessage('login succesfull', context);
         }
-        if (state.postApiStatus == PostAPiStatus.loading) {
-          FlushBarHelper.flushBarErrorMessage('submitting', context);
-        }
+        // if (state.postApiStatus == PostAPiStatus.loading) {
+        //   FlushBarHelper.flushBarErrorMessage('submitting', context);
+        // }
       },
 
-      //   "email": "eve.holt@reqres.in",
+      //TODO: //   "email": "eve.holt@reqres.in",
       // "password": "cityslicka"
       child: BlocBuilder<LoginBloc, LoginStates>(
         buildWhen: (current, previous) =>

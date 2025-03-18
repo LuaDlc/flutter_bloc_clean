@@ -16,13 +16,13 @@ class LoginStates extends Equatable {
     String? email,
     String? password,
     PostAPiStatus? postApiStatus,
-    String? error,
+    String? message,
   }) {
     return LoginStates(
       email: email ?? this.email,
       password: password ?? this.password,
       postApiStatus: postApiStatus ?? this.postApiStatus,
-      message: error ?? message,
+      message: message ?? this.message,
     );
   }
 

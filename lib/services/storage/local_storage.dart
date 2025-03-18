@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class Storage {
+class LocalStorage {
   final storage = const FlutterSecureStorage();
 
   Future<bool> setValue(String key, String value) async {
