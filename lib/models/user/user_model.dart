@@ -5,8 +5,8 @@ part 'user_model.freezed.dart';
 @freezed
 class UserModel with _$UserModel {
   factory UserModel({
-    @Default('') @JsonKey(name: 'token') String token,
-    @Default('') @JsonKey(name: 'error') String error,
+    @Default('') String token,
+    @Default('') String error,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
